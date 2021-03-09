@@ -1,7 +1,11 @@
 # emailer
 Email Factory Helper
 
-This is able to burst email address, when `MAIL_TO` looks like `Bob Jones <bob@example.com>,John Q. Public <john@example.com>`
+This is able to burst email address, when `MAIL_TO` has comma separated email addresses with no spaces around the comma.
+```
+"Bob Jones <bob@example.com>,John Q. Public <john@example.com>"
+```
+
 
 ```
 import os
