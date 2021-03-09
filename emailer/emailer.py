@@ -11,6 +11,7 @@ import os
 import re
 import smtplib
 
+
 class Email:
     """
     This class handles the creation and sending of email messages
@@ -31,20 +32,29 @@ class Email:
         self._cc = []
         self._subject = ""
         self._smtpServer = smtpServer
-        self._reEmail = re.compile("^([\\w \\._]+\\<[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\>|[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$")
+        self._reEmail = re.compile(
+            "^([\\w \\._]+\\<[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\"
+            ".[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:"
+            "[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\"
+            ".)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\"
+            ">|[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\"
+            ".[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:"
+            "[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\"
+            ".)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)$")
         self.clearRecipients()
         self.clearAttachments()
-    
+
     def send(self):
         """
         Send the email message represented by this object.
         """
         # Validate message
         if self._textBody is None and self._htmlBody is None:
-            raise Exception("Error! Must specify at least one body type (HTML or Text)")
+            raise Exception(
+                "Error! Must specify at least one body type (HTML or Text)")
         if len(self._to) == 0:
             raise Exception("Must specify at least one recipient")
-        
+
         # Create the message part
         if self._textBody is not None and self._htmlBody is None:
             msg = MIMEText(self._textBody, "plain")
@@ -59,12 +69,14 @@ class Email:
             tmpmsg = msg
             msg = MIMEMultipart()
             msg.attach(tmpmsg)
-        for fname,attachname in self._attach:
+        for fname, attachname in self._attach:
             if not os.path.exists(fname):
-                print("File '%s' does not exist.  Not attaching to email." % fname)
+                print("File '%s' does not exist.  Not attaching to email."
+                      % fname)
                 continue
             if not os.path.isfile(fname):
-                print("Attachment '%s' is not a file.  Not attaching to email." % fname)
+                print("Attachment '%s' is not a file.  Not attaching to email."
+                      % fname)
                 continue
             # Guess at encoding type
             ctype, encoding = mimetypes.guess_type(fname)
@@ -96,27 +108,30 @@ class Email:
                 filename = os.path.basename(fname)
             else:
                 filename = attachname
-            attach.add_header('Content-Disposition', 'attachment', filename=filename)
+            attach.add_header('Content-Disposition',
+                              'attachment',
+                              filename=filename)
             msg.attach(attach)
         # Some header stuff
         msg['Subject'] = self._subject
         msg['From'] = self._from
         msg['To'] = ", ".join(self._to)
         msg['Cc'] = ", ".join(self._cc)
-        msg.preamble = "You need a MIME enabled mail reader to see this message"
+        msg.preamble = (
+            "You need a MIME enabled mail reader to see this message")
         # Send message
         msg = msg.as_string()
         server = smtplib.SMTP(self._smtpServer)
         # server.set_debuglevel(True)
         server.sendmail(self._from, self._to + self._cc + self._bcc, msg)
         server.quit()
-    
+
     def setSubject(self, subject):
         """
         Set the subject of the email message.
         """
         self._subject = subject
-    
+
     def setFrom(self, address):
         """
         Set the email sender.
@@ -124,7 +139,7 @@ class Email:
         if not self.validateEmailAddress(address):
             raise Exception("Invalid email address '%s'" % address)
         self._from = address
-    
+
     def clearRecipients(self):
         """
         Remove all currently defined recipients for
@@ -133,7 +148,7 @@ class Email:
         self._to = []
         self._cc = []
         self._bcc = []
-    
+
     def addRecipient(self, address):
         """
         Add a new recipient to the email message.
@@ -163,19 +178,19 @@ class Email:
         Set the plain text body of the email message.
         """
         self._textBody = body
-    
+
     def setHtmlBody(self, body):
         """
         Set the HTML portion of the email message.
         """
         self._htmlBody = body
-    
+
     def clearAttachments(self):
         """
         Remove all file attachments.
         """
         self._attach = []
-    
+
     def addAttachment(self, fname, attachname=None):
         """
         Add a file attachment to this email message.
@@ -191,34 +206,34 @@ class Email:
         """
         if fname is None:
             return
-        self._attach.append( (fname, attachname) )
-    
+        self._attach.append((fname, attachname))
+
     def validateEmailAddress(self, address):
         """
         Validate the specified email address.
-        
+
         @return: True if valid, False otherwise
         @rtype: Boolean
         """
         if self._reEmail.search(address) is None:
             return False
         return True
-    
+
+
 if __name__ == "__main__":
-    print ("Tests go here...")
+    print("Tests go here...")
 
     # Run some tests
-    mFrom = 'fredw@northriverboats.com'
-    mTo = "fred.warren@gmail.com"
-    m = Email('northriverboats-com.mail.protection.outlook.com')
+    mFrom = 'user1@example.com'
+    mTo = "user2@example.com"
+    m = Email('mail.example.com')
     m.setFrom(mFrom)
     m.addRecipient(mTo)
-    m.addCC("fredw@northriverboats.com")
-    # m.addBCC("w.brokenbourgh@pismotek.com")
-   
+    m.addCC("user3@example.com")
+
     m.setSubject("Text and HTML Message with CC and BCC")
     m.setTextBody("You should not see this text in a MIME aware reader")
-    m.setHtmlBody("The following should be <b>bold</b>. If this works Will, you will be BCC'd on this.")
+    m.setHtmlBody("The following should be <b>bold</b>. "
+                  "If this works Will, you will be BCC'd on this.")
     m.addAttachment('/tmp/shot.png')
     m.send()
-
