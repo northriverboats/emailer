@@ -11,7 +11,7 @@ setuptools.setup(
     description="an email wrapper",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/northriverboats/emailer,
+    url="https://github.com/northriverboats/emailer",
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
