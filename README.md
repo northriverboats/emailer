@@ -6,7 +6,17 @@ This is able to burst email address, when `MAIL_TO` has comma separated email ad
 "Bob Jones <bob@example.com>,John Q. Public <john@example.com>"
 ```
 
+# Installing with pip
+```
+# note: 
+#       remove emailer=1.0.0
+#       from pip freeze > reqirements.txt
 
+pip install git+https://github.com/northriverboats/emailer.git
+```
+
+
+# Example
 ```
 import os
 from emailer.email import Email
