@@ -30,8 +30,10 @@ class Email:
         self._htmlBody = None
         self._bcc = []
         self._cc = []
+        self._port = 25
         self._subject = ""
         self._smtpServer = smtpServer
+        self._tls = False
         self._reEmail = re.compile(
             "^([\\w \\._]+\\<[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\"
             ".[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:"
@@ -121,10 +123,41 @@ class Email:
             "You need a MIME enabled mail reader to see this message")
         # Send message
         msg = msg.as_string()
-        server = smtplib.SMTP(self._smtpServer)
+        server = smtplib.SMTP(self._smtpServer, port=self._port)
         # server.set_debuglevel(True)
+
+        if self._tls:
+            server.ehlo()
+            server.starttls()
+            server.login(self._login, self._password)
+
         server.sendmail(self._from, self._to + self._cc + self._bcc, msg)
         server.quit()
+
+
+    def setPort(self, port):
+        """
+        Set the SMTP port
+        """
+        self._port = port
+
+    def setTLS(self, tls):
+        """
+        Set if TLS is used
+        """
+        self._tls = tls
+
+    def setLogin(self, login):
+        """
+        Set user login name
+        """
+        self._login = login
+
+    def setPassword(self, password):
+        """
+        Set login password
+        """
+        self._password = password
 
     def setSubject(self, subject):
         """
