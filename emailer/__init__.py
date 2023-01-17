@@ -3,4 +3,4 @@
 from .emailer import Email
 
 __version__ = "2.0.0"
-__all__ = ['Email']
+__all__ = ['Email', '__version__']
