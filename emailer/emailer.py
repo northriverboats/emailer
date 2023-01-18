@@ -252,38 +252,39 @@ class Email:
             return False
         return True
 
-    def nrb_send(subject, html, text=""):
-        """
-        send email relying on env vars for server info
 
-        @parm subject    the subject of the email
-        @parm html       html formatted message (required)
-        @parm text       text formatted message (optional)
+def nrb_send(subject, html, text=""):
+    """
+    send email relying on env vars for server info
 
-        @return None
-        """
-        text = text or "You should not see this text in a MIME aware reader"
+    @parm subject    the subject of the email
+    @parm html       html formatted message (required)
+    @parm text       text formatted message (optional)
 
-        mail = Email(os.getenv('MAIL_SERVER'))
-        mail.setPort(os.gentenv('MAIL_PORT'))
-        mail.setTLS(os.gentenv('MAIL_TLS'))
-        mail.setLogin(os.gentenv('MAIL_LOGIN'))
-        mail.setPassword(os.gentenv('MAIL_PASSWORD'))
+    @return None
+    """
+    text = text or "You should not see this text in a MIME aware reader"
 
-        mail.setFrom(os.getenv('MAIL_FROM'))
+    mail = Email(os.getenv('MAIL_SERVER'))
+    mail.setPort(os.gentenv('MAIL_PORT'))
+    mail.setTLS(os.gentenv('MAIL_TLS'))
+    mail.setLogin(os.gentenv('MAIL_LOGIN'))
+    mail.setPassword(os.gentenv('MAIL_PASSWORD'))
 
-        emails = [email for email in os.getenv('MAIL_TO').split(',') if email]
-        for email in emails:
-            mail.addRecipient(email)
+    mail.setFrom(os.getenv('MAIL_FROM'))
 
-        ccs = [cc for cc in os.getenv('MAIL_CC').split(',') if cc]
-        for cc in ccs:
-            mail.addCC(os.getenv('MAIL_FROM'))
+    emails = [email for email in os.getenv('MAIL_TO').split(',') if email]
+    for email in emails:
+        mail.addRecipient(email)
 
-        mail.setSubject(subject)
-        mail.setTextBody(text)
-        mail.setHtmlBody(html)
-        mail.send()
+    ccs = [cc for cc in os.getenv('MAIL_CC').split(',') if cc]
+    for cc in ccs:
+        mail.addCC(os.getenv('MAIL_FROM'))
+
+    mail.setSubject(subject)
+    mail.setTextBody(text)
+    mail.setHtmlBody(html)
+    mail.send()
 
 if __name__ == "__main__":
     print("Tests go here...")
