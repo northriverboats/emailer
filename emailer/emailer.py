@@ -274,7 +274,7 @@ class Email:
 
         emails = [email for email in os.getenv('MAIL_TO').split(',') if email]
         for email in emails:
-        mail.addRecipient(email)
+            mail.addRecipient(email)
 
         ccs = [cc for cc in os.getenv('MAIL_CC').split(',') if cc]
         for cc in ccs:
