@@ -266,10 +266,10 @@ def nrb_send(subject, html, text=""):
     text = text or "You should not see this text in a MIME aware reader"
 
     mail = Email(os.getenv('MAIL_SERVER'))
-    mail.setPort(os.gentenv('MAIL_PORT'))
-    mail.setTLS(os.gentenv('MAIL_TLS'))
-    mail.setLogin(os.gentenv('MAIL_LOGIN'))
-    mail.setPassword(os.gentenv('MAIL_PASSWORD'))
+    mail.setPort(os.getenv('MAIL_PORT'))
+    mail.setTLS(os.getenv('MAIL_TLS'))
+    mail.setLogin(os.getenv('MAIL_LOGIN'))
+    mail.setPassword(os.getenv('MAIL_PASSWORD'))
 
     mail.setFrom(os.getenv('MAIL_FROM'))
 
