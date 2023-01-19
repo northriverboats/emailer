@@ -273,11 +273,11 @@ def nrb_send(subject, html, text=""):
 
     mail.setFrom(os.getenv('MAIL_FROM'))
 
-    emails = [email for email in os.getenv('MAIL_TO').split(',') if email]
+    emails = [email for email in (os.getenv('MAIL_TO') or "").split(',') if email]
     for email in emails:
         mail.addRecipient(email)
 
-    ccs = [cc for cc in os.getenv('MAIL_CC').split(',') if cc]
+    ccs = [cc for cc in (os.getenv('MAIL_CC') or "").split(',') if cc] or []
     for cc in ccs:
         mail.addCC(os.getenv('MAIL_FROM'))
 
