@@ -253,7 +253,7 @@ class Email:
         return True
 
 
-def nrb_send(subject, html, text=""):
+def mail_results(subject, html, text=""):
     """
     send email relying on env vars for server info
 
