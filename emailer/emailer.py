@@ -253,7 +253,7 @@ class Email:
         return True
 
 
-def mail_results(subject, html, text=""):
+def mail_results(subject, html, text="", attachments=""):
     """
     send email relying on env vars for server info
 
@@ -284,6 +284,8 @@ def mail_results(subject, html, text=""):
     mail.setSubject(subject)
     mail.setTextBody(text)
     mail.setHtmlBody(html)
+    if (attachment):
+        mail.addAttachment(attachment)
     mail.send()
 
 if __name__ == "__main__":
