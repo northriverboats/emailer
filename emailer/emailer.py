@@ -253,7 +253,7 @@ class Email:
         return True
 
 
-def mail_results(subject, html, text="", attachments=""):
+def mail_results(subject, html, text="", recipient="", attachments=""):
     """
     send email relying on env vars for server info
 
@@ -273,7 +273,8 @@ def mail_results(subject, html, text="", attachments=""):
 
     mail.setFrom(os.getenv('MAIL_FROM'))
 
-    emails = [email for email in (os.getenv('MAIL_TO') or "").split(',') if email]
+    eamils = recipient or os.getenv('MAIL_TO') or ""
+    emails = [email for email in emails.split(',') if email]
     for email in emails:
         mail.addRecipient(email)
 
