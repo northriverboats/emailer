@@ -253,7 +253,7 @@ class Email:
         return True
 
 
-def mail_results(subject, html, text="", recipient="", attachments=""):
+def mail_results(subject, html, text="", recipient="", attachment=""):
     """
     send email relying on env vars for server info
 
