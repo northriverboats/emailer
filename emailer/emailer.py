@@ -273,7 +273,7 @@ def mail_results(subject, html, text="", recipient="", attachments=""):
 
     mail.setFrom(os.getenv('MAIL_FROM'))
 
-    eamils = recipient or os.getenv('MAIL_TO') or ""
+    emails = recipient or os.getenv('MAIL_TO') or ""
     emails = [email for email in emails.split(',') if email]
     for email in emails:
         mail.addRecipient(email)
